@@ -11,10 +11,10 @@ Library    libs/board_resouce.py
 Library    libs/company_resource.py
 Library    load_env.py
 
-Resource    resource/utils/customKeywords.resource
-Resource    resource/board.resource
-Resource    resource/company.resource
-Resource    resource/user.resource
+Resource    resources/utils/customKeywords.resource
+Resource    resources/board.resource
+Resource    resources/company.resource
+Resource    resources/user.resource
 
 *** Variables ***
 
