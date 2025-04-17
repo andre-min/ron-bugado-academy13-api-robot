@@ -1,0 +1,76 @@
+name: Robot Framework Tests
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test:
+    name: API tests 
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Clonar arquivos do repositório
+      uses: actions/checkout@v4
+
+    - name: Criar arquivo .env temporário
+      run: | 
+        echo "ADMIN_MAIL=${{ secrets.ADMIN_MAIL }}" >> .env
+        echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" >> .env
+        echo "ALUNO_MAIL=${{ secrets.ALUNO_MAIL }}" >> .env
+        echo "ALUNO_PASSWORD=${{ secrets.ALUNO_PASSWORD }}" >> .env
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+
+    - name: Criar ambiente venv e instalar dependências
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Executando os testes
+      run: |
+        source venv/bin/activate
+        robot --outputdir results/ .
+
+    - name: Resultado dos testes
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: robot-framework-report
+        path: results
+
+  deploy:
+  
+    name: Deploy GitHub Pages
+    runs-on: ubuntu-24.04
+    if: always()
+    needs:
+      - test
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: https://andre-min.github.io/ron_bugado_web/report.html
+      
+           
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: robot-framework-report
+          path: results/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: results/
+
+      - name: Deploy to Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
