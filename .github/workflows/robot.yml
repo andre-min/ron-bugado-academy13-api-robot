@@ -53,7 +53,7 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: https://andre-min.github.io/ron_bugado_web/report.html
+      url: https://andre-min.github.io/ron-bugado-academy13-api-robot/report.html
       
            
     steps:
