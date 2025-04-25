@@ -6,13 +6,22 @@ Resource    ../base.resource
 
 CT01 - Cadastrar usuario com sucesso
     ${response}    Cadastrar usuario    
-    Status Should Be    201    ${response["res"]}
-    Should Be Equal    
-    ...    first=Olá ${response["req"]["fullName"]}, cadastro realizado com sucesso.    
-    ...    second=${response["res"].json()["msg"]}
-    ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
-    Status Should Be    200    ${deleteResponse}
-    Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}
+    TRY
+
+        Status Should Be    201    ${response["res"]}
+        Should Be Equal    
+        ...    first=Olá ${response["req"]["fullName"]}, cadastro realizado com sucesso.    
+        ...    second=${response["res"].json()["msg"]}
+        
+    FINALLY
+
+        ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
+        Status Should Be    200    ${deleteResponse}
+        Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}
+
+    END
+    
+    
 CT02 - Cadastro com campo nome completo em branco
     ${response}    Cadastrar usuario    fullName=branco
     Status Should Be    400    ${response["res"]}
@@ -25,16 +34,26 @@ CT03 - Cadastro com campo nome completo com mais de 100 caracteres
     ${letras_minusculas}    Convert To Lower Case    ${letras}
     ${fullNameLog}    Set Variable    Maximiliano Eduardo Pereira da Silva Costa Martins Albuquerque Barbosa dos Santos Oliveira Barro${letras_minusculas}
     ${response}    Cadastrar usuario    fullName=${fullNameLog} 
-    Status Should Be    201    ${response["res"]}
-    Should Be Equal    
-    ...    first=Olá ${fullNameLog}, cadastro realizado com sucesso.    
-    ...    second=${response["res"].json()["msg"]}
-    Should Be Equal    
-    ...    first=${fullNameLog}    
-    ...    second=${response["res"].json()["user"]["fullName"]}
-    ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
-    Status Should Be    200    ${deleteResponse}
-    Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}
+
+    TRY
+        
+        Status Should Be    201    ${response["res"]}
+        Should Be Equal    
+        ...    first=Olá ${fullNameLog}, cadastro realizado com sucesso.    
+        ...    second=${response["res"].json()["msg"]}
+        Should Be Equal    
+        ...    first=${fullNameLog}    
+        ...    second=${response["res"].json()["user"]["fullName"]}
+        
+    FINALLY
+
+        ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
+        Status Should Be    200    ${deleteResponse}
+        Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}   
+
+    END
+    
+
 
 CT04 - Cadastro com campo nome completo com nome alfanumérico.
     ${numeros}    Generate Random String    length=3    chars=${DIGITS}
@@ -56,35 +75,43 @@ CT06 - Cadastro com campo nome completo somente com primeiro nome
     ${response}    Cadastrar usuario    fullName=Paulo
     Status Should Be    400    ${response["res"]}
     Should Be Equal    
-    ...    first=Informe o nome e sobrenome.    
+    ...    first=Informe o nome e sobrenome com as iniciais em letra maiúscula e sem caracteres especiais.    
     ...    second=${response["res"].json()["error"][0]}
 
 CT07 - Cadastro com campo nome completo com as letras minúsculas
     ${response}    Cadastrar usuario    fullName=paulo siqueira
     Status Should Be    400    ${response["res"]}
     Should Be Equal    
-    ...    first=Informe o nome e sobrenome.    
+    ...    first=Informe o nome e sobrenome com as iniciais em letra maiúscula e sem caracteres especiais.  
     ...    second=${response["res"].json()["error"][0]}
     
 CT08 - Cadastro com campo nome completo com as letras maiusculas
     ${response}    Cadastrar usuario    fullName=MATHEUS SOUSA
     Status Should Be    400    ${response["res"]}
     Should Be Equal    
-    ...    first=Informe o nome e sobrenome.
+    ...    first=Informe o nome e sobrenome com as iniciais em letra maiúscula e sem caracteres especiais.
     ...    second=${response["res"].json()["error"][0]}
     
 CT09 - Cadastro com campo nome com mais de duas palavras composta
     ${response}    Cadastrar usuario    fullName=João Tavares Tavares
-    Status Should Be    201    ${response["res"]}
-    Should Be Equal    
-    ...    first=Olá ${response["req"]["fullName"]}, cadastro realizado com sucesso.    
-    ...    second=${response["res"].json()["msg"]}
-    Should Be Equal    
-    ...    first=${response["req"]["fullName"]}    
-    ...    second=${response["res"].json()["user"]["fullName"]}
-    ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
-    Status Should Be    200    ${deleteResponse}
-    Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}
+
+    TRY
+        
+        Status Should Be    201    ${response["res"]}
+        Should Be Equal    
+        ...    first=Olá ${response["req"]["fullName"]}, cadastro realizado com sucesso.    
+        ...    second=${response["res"].json()["msg"]}
+        Should Be Equal    
+        ...    first=${response["req"]["fullName"]}    
+        ...    second=${response["res"].json()["user"]["fullName"]}
+        
+    FINALLY
+
+        ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
+        Status Should Be    200    ${deleteResponse}
+        Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}    
+
+    END
 
 CT10 - Cadastro com campo e-mail em branco
     ${response}    Cadastrar usuario    mail=branco
@@ -109,13 +136,21 @@ CT12 - Cadastro com campo e-mail com espaço entre o domínio
 
 CT13 - Cadastro com Sucesso com domínio de outro países
     ${response}    Cadastrar usuario    mail=oliviaoliveira@qacoders.com.pt
-    Status Should Be    201    ${response["res"]}
-    Should Be Equal    
-    ...    first=oliviaoliveira@qacoders.com.pt    
-    ...    second=${response["res"].json()["user"]["mail"]}
-    ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
-    Status Should Be    200    ${deleteResponse}
-    Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}
+
+    TRY
+        
+        Status Should Be    201    ${response["res"]}
+        Should Be Equal    
+        ...    first=oliviaoliveira@qacoders.com.pt    
+        ...    second=${response["res"].json()["user"]["mail"]}
+        
+    FINALLY
+
+        ${deleteResponse}    Excluir usuario    ${response["res"].json()["user"]["_id"]}
+        Status Should Be    200    ${deleteResponse}
+        Should Be Equal    first=Usuário deletado com sucesso!.    second=${deleteResponse.json()["msg"]}
+
+    END
 
 CT14 - Cadastro com campo senha em branco
     ${response}    Cadastrar usuario    password=branco
@@ -203,7 +238,7 @@ CT26 - Cadastro com campo CPF em branco
     ${response}    Cadastrar usuario    cpf=branco    
     Status Should Be    400    ${response["res"]}
     Should Be Equal    
-    ...    first=O campo CPF é obrigatório.    
+    ...    first=O campo CPF é obrigatório!    
     ...    second=${response["res"].json()["error"][0]}
 
 CT27 - Cadastro com campo CPF ja cadastrado

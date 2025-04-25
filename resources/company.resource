@@ -97,12 +97,12 @@ Atualizar cadastro de empresa
     ${letras}    Generate Random String    length=6    chars=[LETTERS]
     ${letras_minusculas}    Convert To Lower Case    ${letras}  
     ${corporate_name}            Set Default If Empty    ${corporate_name}           ${newCompany["corporateName"]}${letras_minusculas}
-    ${register_company}          Set Default If Empty    ${registerCompany}                  ${newCompany["registerCompany"]}
-    ${mail_}                     Set Default If Empty    ${mail}                 ${newCompany["mail"]}
-    ${matriz_}                   Set Default If Empty    ${matriz}            ${newCompany["matriz"]}
-    ${responsible_contact}       Set Default If Empty    ${responsibleContact}    ${newCompany["responsibleContact"]}
-    ${telephone_}                Set Default If Empty    ${telephone}             ${newCompany["telephone"]}
-    ${service_description}       Set Default If Empty    ${serviceDescription}    ${newCompany["serviceDescription"]}
+    ${register_company}          Set Default If Empty    ${registerCompany}          ${newCompany["registerCompany"]}
+    ${mail_}                     Set Default If Empty    ${mail}                     ${newCompany["mail"]}
+    ${matriz_}                   Set Default If Empty    ${matriz}                   ${newCompany["matriz"]}
+    ${responsible_contact}       Set Default If Empty    ${responsibleContact}       ${newCompany["responsibleContact"]}
+    ${telephone_}                Set Default If Empty    ${telephone}                ${newCompany["telephone"]}
+    ${service_description}       Set Default If Empty    ${serviceDescription}       ${newCompany["serviceDescription"]}
 
     ${body}    Create Dictionary
     ...    corporateName=${corporate_name}
@@ -115,8 +115,7 @@ Atualizar cadastro de empresa
     
     ${id}        Set Variable         ${newCompany["_id"]}
     ${params}    Create Dictionary    token=${token}
-
-    ${response}    PUT On Session    alias=ron-bugado    expected_status=any    url=/api/company/${id}    params=${params}    json=${body}
+    ${response}    PUT On Session     alias=ron-bugado    expected_status=any    url=/api/company/${id}    params=${params}    json=${body}
     
     ${result}    Create Dictionary
     ...    empresa          ${newCompany}
@@ -126,18 +125,18 @@ Atualizar cadastro de empresa
 
 Excluir cadastro de empresa
     [Documentation]    Keyword utilizada para excluir cadastro de empresa
-    [Arguments]    ${id}    ${perfil}=
-    ${token}    Set Token    ${perfil}
-    ${params}    Create Dictionary    token=${token}
+    [Arguments]    ${id}                ${perfil}=
+    ${token}       Set Token            ${perfil}
+    ${params}      Create Dictionary    token=${token}
     ${response}    DELETE On Session    alias=ron-bugado    expected_status=any    url=/api/company/${id}    params=${params}
     RETURN    ${response}
 
 Listar empresas cadastradas no sistema
     [Documentation]    Keyword utilizada para lista empresas
     [Arguments]    ${perfil}=
-    ${token}    Set Token    ${perfil}
-    ${params}    Create Dictionary    token=${token}
-    ${response}    GET On Session    alias=ron-bugado    expected_status=any    url=/api/company/    params=${params}
+    ${token}       Set Token            ${perfil}
+    ${params}      Create Dictionary    token=${token}
+    ${response}    GET On Session       alias=ron-bugado    expected_status=any    url=/api/company/    params=${params}
     RETURN    ${response.json()}
 
 Atualizar endereço da empresa

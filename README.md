@@ -95,3 +95,19 @@ Para executar um teste específico:
   ```
 
 ---
+
+
+## 👥 Squad: Ron - Bugado
+
+### 💡 Tech Lead  
+- Vanderson
+
+### 👩‍💻 Participantes  
+- Andre Minato  
+- Cida Nunes  
+- Cristielem Vilaça  
+- Karen Krejcik  
+- Marcelo Martins  
+- Matheus Silva
+
+---

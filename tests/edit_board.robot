@@ -8,7 +8,7 @@ CT01 - Editar diretoria com sucesso
      ${id}    Board Id Valido
     ${letras}    Generate Random String    length=2    chars=[LETTERS]
     ${letras_minusculas}    Convert To Lower Case    ${letras}
-    ${response}    Atualizar Board    Rado${letras_minusculas}     ${id}
+    ${response}    Atualizar Board    Ron Bugado Editado${letras_minusculas}     ${id}
     Status Should Be    200    ${response}
     Should Be Equal    first=Cadastro atualizado com sucesso.    second=${response.json()["msg"]}
     Should Be Equal    first=Ron Bugado Editado${letras_minusculas}    second=${response.json()["updatedBoard"]["boardName"]}
